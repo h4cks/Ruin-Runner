@@ -1,0 +1,117 @@
+<map proto="1.3.3">
+	<name>Ruin Runner</name>
+	<version>0.1.0</version>
+	<objective>Arrive to the goal!</objective>
+
+	<authors>
+		<author>EEE</author>
+	</authors>
+
+	<teams>
+		<team color="blue" max="6">blue</team>
+		<team color="red" max="6">red</team>
+		<team color="yellow" max="6">yellow</team>
+		<team color="green" max="6">green</team>
+	</teams>
+
+	<kits>
+		<kit name="blue-kit">
+			<potion duration="oo" amplifier="0">Invisibility</potion>
+			<potion duration="oo" amplifier="-2000">Hunger</potion>
+			<boots color="0000ff" locked="true">leather boots</boots>
+		</kit>
+		<kit name="red-kit">
+			<potion duration="oo" amplifier="0">Invisibility</potion>
+			<potion duration="oo" amplifier="-2000">Hunger</potion>
+			<boots color="ff0000" locked="true">leather boots</boots>
+		</kit>
+		<kit name="yellow-kit">
+			<potion duration="oo" amplifier="0">Invisibility</potion>
+			<potion duration="oo" amplifier="-2000">Hunger</potion>
+			<boots color="22ffff" locked="true">leather boots</boots>
+		</kit>
+		<kit name="green-kit">
+			<potion duration="oo" amplifier="0">Invisibility</potion>
+			<potion duration="oo" amplifier="-2000">Hunger</potion>
+			<boots color="00ffff" locked="true">leather boots</boots>
+		</kit>
+	</kits>
+
+	<spawns>
+		<spawn team="blue" yaw="-90" kit="blue-kit">
+			<cuboid min="-2,4,4" max="-7,4,6"/>
+		</spawn>
+		<spawn team="red" yaw="-90" kit="red-kit">
+		5<cuboid min="-2,4,1" max="-7,4,3"/>
+		</spawn>
+		<spawn team="yellow" yaw="-90" kit="yellow-kit">
+			<cuboid min="-2,4,-2" max="-7,4,0"/>
+		</spawn>
+		<spawn team="green" yaw="-90" kit="green-kit">
+			<cuboid min="-2,4,-5" max="-7,4,-3"/>
+		</spawn>
+		<default yaw="-90">
+			<cuboid min="-19,4,-1" max="-17,4,2"/>
+		</default>
+	</spawns>
+
+	<!-- 地形編集の無効化 -->
+	<regions>
+		<apply block="deny-all" message="地形の編集はできません。">
+			<negative>
+				<cuboid min="0,0,0" max="0,0,0"/>
+			</negative>
+		</apply>
+	</regions>
+
+	<walls drop-time="10" materials="sand">
+		<cuboid min="5,2,-3" max="9,5,4"/>
+	</walls>
+
+	<!--  落下ダメージ無効  -->
+	<disabledamage>
+		<damage>fall</damage>
+	</disabledamage>
+
+    <script>
+		<![CDATA[
+			match.on('start', function() {
+				match.getWorld().setTime(12000);
+				match.getWorld().setPVP(false);
+				setInterval(function(){
+					var players = match.getPlayers();
+					var teamcounts = 0;
+					for (var i = 0; i < players.length; i++) {
+						var player = players[i];
+						if ((player.getLocation()[0] > 194)
+							&& (player.getLocation()[1] > 1)
+							&& (player.getLocation()[2] > -6)
+							&&	(player.getLocation()[2] < 7)
+						) {
+							match.broadcast(player.getName()+" GOAL!!!");
+							for (var j = 0; j < players.length; j++) {
+								var sound = players[i];
+								sound.playSound("Wither Death", 1, 1);
+							};
+							match.end(player.getTeam());
+						};
+					};
+				},100);
+			});
+		]]>
+    </script>
+
+	<include src="tutorial.xml"/>
+	<tutorial>
+		<stage title="Tutorial">
+			<message>
+				<line>This map is a `a`lRunning `rmap.</line>
+				<line>The objective is aliving at the goal before enemies reach to it.</line>
+			</message>
+			<message lang="ja_JP">
+				<line>このマップは`a`lRunning `rマップです。</line>
+				<line>他のチームよりも早くゴールに辿り着くことが目標になります。</line>
+			</message>
+		</stage>
+	</tutorial>
+</map>
